@@ -22,6 +22,25 @@ const todoList = {
         );
     },
 
+    preFillTodoList() {
+        document
+            .addEventListener(
+                'DOMContentLoaded',  
+            this.preFillHandler.bind(this)
+            )
+    },
+    preFillHandler(){
+        const data = this.getData();
+        //console.log(data);
+        data.forEach(todoItem => {
+            const template = this.createTemplate(todoItem);
+            document
+                .getElementById('todoItems')
+                .prepend(template);
+        })
+        
+    },
+
     formHandler(event) {
         event.preventDefault();
         console.log('form submitted');
@@ -34,17 +53,36 @@ const todoList = {
         });
 
         this.setData(data);
-        const template = this.createTamplate(data);
+        const template = this.createTemplate(data);
 
         document.getElementById('todoItems')
-        .prepend(template);
-        console.log(data);
+            .prepend(template);
+            console.log(data);
+        event.target.reset();
         
     },
     setData(data) {
+        if(!localStorage.getItem(this.formId)) {
+            let arr = [];
+            arr.push(data);
+
+            localStorage.setItem(
+                this.formId,
+                JSON.stringify(arr)
+            );
+            return;
+        }
+        let existingData = localStorage.getItem(this.formId);
+        existingData =JSON.parse(existingData);
+        existingData.push(data);
         localStorage.setItem(
             this.formId,
-            JSON.stringify(data));
+            JSON.stringify(existingData)
+        )
+        return;
+    },
+    getData () {
+        return JSON.parse(localStorage.getItem(this.formId));
     },
 
     findInputs(target) {
@@ -60,15 +98,17 @@ const todoList = {
         this.formId = todoListFormId;
         this.findForm();
         this.addFormHandler();
+        this.preFillTodoList();
     }, 
 
-    createTamplate({title,description}) {
-        const divCol = this.createElement('div','col-4');
+    createTemplate({title,description}) {
+        //console.log({title,description});
+        const todoItem = this.createElement('div','col-4');
 
         const taskWrapper = this.createElement('div','taskWrapper');
-        divCol.classList.add('taskWrapper');
+        todoItem.classList.add('taskWrapper');
 
-        divCol.append(taskWrapper);
+        todoItem.append(taskWrapper);
 
         const taskHeading = this.createElement(
             'div',
@@ -82,7 +122,7 @@ const todoList = {
             );
         taskWrapper.append(taskHeading);
         taskWrapper.append(taskDescription);
-        return divCol
+        return todoItem
     },
 
     createElement(nodeName, classes, innerContent) {
