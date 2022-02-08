@@ -23,13 +23,13 @@ const todoList = {
             (event) => this.formHandler(event)
         ); 
     },
-    deleteAllTasks () {
-        this.form.addEventListener(
-            'onclick',
-            (event) => this.formHandler(event)
-            );
-            console.log('!!!');
-    },
+    // deleteAllTasks () {
+    //     this.form.addEventListener(
+    //         'onclick',
+    //         (event) => this.formHandler(event)
+    //         );
+    //         console.log('!!!');
+    // },
     preFillTodoList() {
         //console.log('this ' + bind(this));//fix this
         document
@@ -55,30 +55,28 @@ const todoList = {
     },
 
     formHandler(event) {
-        event.preventDefault();
-        
+        event.preventDefault();       
         if (event.submitter.id === 'del'){
-            localStorage.clear();
-            document.getElementById('todoItems')
-                .remove();
-            return
-        }
-
-        
-// отменяем перезагрузку страницы        
-        //console.log('form submitted');
+            if(confirm('точно удалить?')) {
+                localStorage.clear();
+                document.querySelectorAll('div.col-4.taskWrapper').forEach(divTask => {
+                    divTask.remove();
+                }) 
+                return
+            }
+        }     
         const inputs = this.findInputs(event.target);
-// записываем в переменную инпуты из формы
+        // записываем в переменную инпуты из формы
         const data = {};
-        //console.log(event.target);
-// записываем в обьект ключ и значение каждого инпута
+            // записываем в обьект ключ и значение каждого инпута
             inputs.forEach(input => {
+                console.log(input);
                 data[input.name] = input.value;
             });
-// вызываем функцию записи данных в localstorage
+            data['completed'] = 'false';
+        // вызываем функцию записи данных в localstorage
             this.setData(data);
             const template = this.createTemplate(data);
-
             document.getElementById('todoItems')
                 .prepend(template);
                 //console.log(event.target);
@@ -136,26 +134,51 @@ const todoList = {
     createTemplate({title,description}) {
         //console.log({title,description});
         const todoItem = this.createElement('div','col-4');
-
+        
         const taskWrapper = this.createElement('div','taskWrapper');
+        
         todoItem.classList.add('taskWrapper');
         todoItem.append(taskWrapper);
         const taskHeading = this.createElement(
             'div',
             'taskHeading',
+            '',
             title
         );
         const taskDescription = this.createElement(
             'div',
             'taskDescription',
+            '',
             description   
             );
         taskWrapper.append(taskHeading);
         taskWrapper.append(taskDescription);
+
+        const todoCheckBox = this.createCheckBox('','');
+        todoItem.append(todoCheckBox);
+        
+        // const divCheckBox = this.createElement('div','form-check');
+        
+        //     const checkBox = this.createElement('input','form-check-input','checkbox','false');
+        //     divCheckBox.prepend(checkBox);
+
+        //     const checkLabel = this.createElement('label','form-check-label','false');
+        //     divCheckBox.prepend(checkBox);
+
+        // todoItem.append(divCheckBox);
+
+
+        
+        
+        
+        //todoItem.append(divCheckBox);
+        
+
+
         return todoItem
     },
 
-    createElement(nodeName, classes, innerContent) {
+    createElement(nodeName, classes, type, innerContent) {
         const el = document.createElement(nodeName);
 
         if(Array.isArray(classes)) {
@@ -166,13 +189,29 @@ const todoList = {
         } else {
             el.classList.add(classes);
         }
-
+        if (type !== '' && type) {
+            el.setAttribute('type', type);
+        }
         if (innerContent) {
             el.innerHTML = innerContent;
         }
         
         return el;
+    },
+
+    createCheckBox (classes,id) {
+        const checkBox = this.createElement('div','form-check');
+        console.log(checkBox); 
+            const checkInput = this.createElement('input','form-check-input','checkbox');
+            checkInput.setAttribute('id', 'flexCheckChecked');
+            checkBox.prepend(checkInput);
+            
+            const checkLabel = this.createElement('label','form-check-label');
+            checkLabel.setAttribute('for', 'flexCheckChecked');
+            checkBox.prepend(checkLabel);
+        return checkBox;
     }
+
 }
 
 
