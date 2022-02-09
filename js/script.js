@@ -4,6 +4,7 @@
 const todoList = {
     formId: null,
     form: null,
+    todo:null,
     
     findForm() {
         const form = document.getElementById(this.formId);
@@ -16,6 +17,17 @@ const todoList = {
         this.form = form;
         return form;
     },
+    findTodo() {
+        const todo = document.getElementById('todoItems');
+// находим и записываем в переменную форму
+
+        if(todo === null) {
+            throw new Error ('There is no such TODO on the page');
+        }
+
+        this.todo = todo;
+        return todo;
+    },
     addFormHandler() {
 // вешаем слушатель событий на кнопку
         this.form.addEventListener(
@@ -23,13 +35,14 @@ const todoList = {
             (event) => this.formHandler(event)
         ); 
     },
-    // deleteAllTasks () {
-    //     this.form.addEventListener(
-    //         'onclick',
-    //         (event) => this.formHandler(event)
-    //         );
-    //         console.log('!!!');
-    // },
+    addTodoHandler() {
+        // вешаем слушатель событий на todo
+                this.form.addEventListener(
+                    'submit',
+                    (event) => this.formHandler(event)
+                ); 
+            },
+
     preFillTodoList() {
         //console.log('this ' + bind(this));//fix this
         document
@@ -46,10 +59,16 @@ const todoList = {
             if (data.length > 0) {
                 data.forEach(todoItem => {
                     const template = this.createTemplate(todoItem);
+                    
                     document
                         .getElementById('todoItems')
                         .prepend(template);
                 })
+
+                console.log(this.todo);
+                //document.querySelector('todoItems').addEventListener('onclick',(event) {
+//
+  //              })
             }
         }
     },
@@ -70,10 +89,12 @@ const todoList = {
         const data = {};
             // записываем в обьект ключ и значение каждого инпута
             inputs.forEach(input => {
-                console.log(input);
+                //console.log(input);
                 data[input.name] = input.value;
             });
             data['completed'] = 'false';
+            data['id'] = this.getIdTodoItem();
+            
         // вызываем функцию записи данных в localstorage
             this.setData(data);
             const template = this.createTemplate(data);
@@ -81,8 +102,6 @@ const todoList = {
                 .prepend(template);
                 //console.log(event.target);
                 event.target.reset();
-        
-        
     },
     setData(data) {
         if(!localStorage.getItem(this.formId)) {
@@ -125,19 +144,23 @@ const todoList = {
         this.findForm();
 // вызов функции поиска формы
         this.addFormHandler();
+
+        this.findTodo();
 // вызов функции слушателя событий
         this.preFillTodoList();
         //this.deleteAllTasks ();
         
     }, 
 
-    createTemplate({title,description}) {
-        //console.log({title,description});
+    createTemplate({title,description,completed,id}) {
+       //console.log({title,description,completed,id});
+
         const todoItem = this.createElement('div','col-4');
         
         const taskWrapper = this.createElement('div','taskWrapper');
         
         todoItem.classList.add('taskWrapper');
+        //todoItem.setAttribute('id')
         todoItem.append(taskWrapper);
         const taskHeading = this.createElement(
             'div',
@@ -154,26 +177,13 @@ const todoList = {
         taskWrapper.append(taskHeading);
         taskWrapper.append(taskDescription);
 
-        const todoCheckBox = this.createCheckBox('','');
+        const todoCheckBox = this.createCheckBox(
+            id,
+            'Выполнено',
+            completed
+        
+            );
         todoItem.append(todoCheckBox);
-        
-        // const divCheckBox = this.createElement('div','form-check');
-        
-        //     const checkBox = this.createElement('input','form-check-input','checkbox','false');
-        //     divCheckBox.prepend(checkBox);
-
-        //     const checkLabel = this.createElement('label','form-check-label','false');
-        //     divCheckBox.prepend(checkBox);
-
-        // todoItem.append(divCheckBox);
-
-
-        
-        
-        
-        //todoItem.append(divCheckBox);
-        
-
 
         return todoItem
     },
@@ -199,18 +209,37 @@ const todoList = {
         return el;
     },
 
-    createCheckBox (classes,id) {
+    createCheckBox (id,innerContent,completed) {
         const checkBox = this.createElement('div','form-check');
-        console.log(checkBox); 
+        
             const checkInput = this.createElement('input','form-check-input','checkbox');
-            checkInput.setAttribute('id', 'flexCheckChecked');
+            checkInput.setAttribute('id', id);
             checkBox.prepend(checkInput);
             
             const checkLabel = this.createElement('label','form-check-label');
-            checkLabel.setAttribute('for', 'flexCheckChecked');
+            checkLabel.setAttribute('for', id);
+            if (innerContent) {
+                checkLabel.innerHTML = innerContent;
+            }
+            if (completed === 'true') {
+                checkInput.setAttribute('checked','');
+            }
+            
             checkBox.prepend(checkLabel);
         return checkBox;
-    }
+    },
+
+    getIdTodoItem () {
+        let idNumber = 1;
+        if (localStorage.getItem('lastIdTodoItem')) {
+            let oldIdNumber = localStorage.getItem('lastIdTodoItem');
+            idNumber = +oldIdNumber + 1;
+            localStorage.setItem('lastIdTodoItem',idNumber);
+            return idNumber
+        } 
+        localStorage.setItem('lastIdTodoItem',idNumber);
+        return idNumber
+    } 
 
 }
 
@@ -220,7 +249,34 @@ todoList.init('todoForm');
 // Передаем id формы в функцию init
 
 localStorage.setItem('name','yuri');
+localStorage.setItem('name','Igor')
 
 localStorage.getItem('name');
 
 })();
+
+
+
+
+
+
+
+
+
+
+function listenDeleteTodo(element) {
+    element.addEventListener("click", (event) => {
+        element.parentElement.remove();
+        event.stopPropagation();
+    });
+}
+        
+        // const divCheckBox = this.createElement('div','form-check');
+        //     const checkBox = this.createElement('input','form-check-input','checkbox','false');
+        //     divCheckBox.prepend(checkBox);
+        //     const checkLabel = this.createElement('label','form-check-label','false');
+        //     divCheckBox.prepend(checkBox);
+        // todoItem.append(divCheckBox);
+        //todoItem.append(divCheckBox);
+        
+
