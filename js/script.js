@@ -108,6 +108,7 @@ const todoList = {
             
         // вызываем функцию записи данных в localstorage
             this.setData(data);
+            data.id = this.countId ++;
             const template = this.createTemplate(data);
             document.getElementById('todoItems')
                 .prepend(template);
