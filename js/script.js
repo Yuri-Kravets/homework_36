@@ -51,8 +51,8 @@ const todoList = {
         }
     },
     updateTodoItem (id) {
-        localStorage.getItem('todoForm');
-        console.log(JSON.parse(localStorage.getItem(this.formId)));
+        const data = this.getData();
+        console.log(data);
     },
 
     preFillTodoList() {
