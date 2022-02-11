@@ -5,6 +5,7 @@ const todoList = {
     formId: null,
     form: null,
     todo:null,
+    countId: 0,
     
     findForm() {
         const form = document.getElementById(this.formId);
@@ -66,13 +67,12 @@ const todoList = {
     },
     preFillHandler(){
         const data = this.getData();
-        let countId = 0;
-       // console.dir(data);
+
         if(data !== null) {
             if (data.length > 0) {
-                
                 data.forEach(todoItem => {
-                    countId ++;
+                    todoItem.id = this.countId;
+                    this.countId ++;
                     const template = this.createTemplate(todoItem);
                     console.log(todoItem);
                     document
