@@ -39,9 +39,13 @@ const todoList = {
         // вешаем слушатель событий на todo
                 this.todo.addEventListener(
                     'onclick',
-                    (event) => this.formHandler(event)
+                    (event) => this.todoHandler(event)
                 ); 
             },
+
+    todoHandler (event) {
+        console.log(event.target);
+    },
 
     preFillTodoList() {
         //console.log('this ' + bind(this));//fix this
