@@ -55,6 +55,9 @@ const todoList = {
        // console.log(id);
         const data = this.getData();
         console.log(data[id].completed);
+        if (data[id].completed) {
+            
+        }
         
     },
 
