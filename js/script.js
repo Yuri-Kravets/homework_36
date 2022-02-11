@@ -215,7 +215,9 @@ const todoList = {
             'btn',
             'submit',
             );
+            console.log(removeItemBtn);
         todoItem.apppend(removeItemBtn);
+        console.log(removeItemBtn);
 
         return todoItem
     },
