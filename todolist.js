@@ -9,6 +9,7 @@ const todoList = {
     
     findForm() {
         const form = document.getElementById(this.formId);
+// находим и записываем в переменную форму
 
         if(form === null || form.nodeName !== 'FORM') {
             throw new Error ('There is no such form on the page');
@@ -19,6 +20,7 @@ const todoList = {
     },
     findTodo() {
         const todo = document.getElementById('todoItems');
+        //console.log(todo);
         if(todo === null) {
             throw new Error ('There is no such TODO on the page');
         }
@@ -28,16 +30,20 @@ const todoList = {
         
     },
     addFormHandler() {
+// вешаем слушатель событий на кнопку
         this.form.addEventListener(
             'submit',
             (event) => this.formHandler(event)
         ); 
+        //console.log('form submitted');
     },
     addTodoHandler() {
+        // вешаем слушатель событий на todo
                 this.todo.addEventListener(
                     'click',
                     (event) => this.todoHandler(event)
                 ); 
+                //console.log('событие поймал');
             },
 
     todoHandler (event) {
@@ -46,6 +52,7 @@ const todoList = {
         }
     },
     updateTodoItem (id) {
+       // console.log(id);
         const data = this.getData();
         console.log(data[id].completed);
         if (data[id].completed === 'true') {
@@ -67,12 +74,10 @@ const todoList = {
             .addEventListener(
                 'DOMContentLoaded',  
             this.preFillHandler.bind(this)
-
             )
     },
     preFillHandler(){
         const data = this.getData();
-
         if(data !== null) {
             if (data.length > 0) {
                 data.forEach(todoItem => {
@@ -101,18 +106,16 @@ const todoList = {
         }     
         const inputs = this.findInputs(event.target);
         const data = {};
-
             inputs.forEach(input => {
-                //console.log(input);
                 data[input.name] = input.value;
             });
             data['completed'] = 'false';
+            
             this.setData(data);
             data.id = this.countId ++;
             const template = this.createTemplate(data);
             document.getElementById('todoItems')
                 .prepend(template);
-                //console.log(event.target);
                 event.target.reset();
     },
     setData(data) {
@@ -155,6 +158,7 @@ const todoList = {
         this.findTodo();
         this.addTodoHandler();
         this.preFillTodoList();
+        
     }, 
 
     createTemplate({title,description,completed,id}) {
@@ -205,6 +209,7 @@ const todoList = {
         const el = document.createElement(nodeName);
 
         if(Array.isArray(classes)) {
+
             classes.forEach(singleClassName => {
                 el.classList.add(singleClassName);
             })
@@ -245,39 +250,10 @@ const todoList = {
     },
 
 
-}
-
-
-
 todoList.init('todoForm');
 
 
 
 
 })();
-
-
-
-
-
-
-
-
-
-
-function listenDeleteTodo(element) {
-    element.addEventListener("click", (event) => {
-        element.parentElement.remove();
-        event.stopPropagation();
-    });
-}
-        
-        // const divCheckBox = this.createElement('div','form-check');
-        //     const checkBox = this.createElement('input','form-check-input','checkbox','false');
-        //     divCheckBox.prepend(checkBox);
-        //     const checkLabel = this.createElement('label','form-check-label','false');
-        //     divCheckBox.prepend(checkBox);
-        // todoItem.append(divCheckBox);
-        //todoItem.append(divCheckBox);
-        
 
