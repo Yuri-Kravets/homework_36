@@ -57,9 +57,11 @@ const todoList = {
         console.log(data[id].completed);
         if (data[id].completed === 'true') {
             data[id].completed = 'false';
+
         } else  {
             data[id].completed = 'true'
         }
+        localStorage.clear();
         
     },
 
