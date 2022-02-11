@@ -19,7 +19,7 @@ const todoList = {
     },
     findTodo() {
         const todo = document.getElementById('todoItems');
-        console.log(todo);
+        //console.log(todo);
         if(todo === null) {
             throw new Error ('There is no such TODO on the page');
         }
@@ -34,17 +34,25 @@ const todoList = {
             'submit',
             (event) => this.formHandler(event)
         ); 
+        //console.log('form submitted');
     },
     addTodoHandler() {
         // вешаем слушатель событий на todo
                 this.todo.addEventListener(
-                    'onclick',
+                    'click',
                     (event) => this.todoHandler(event)
                 ); 
+                //console.log('событие поймал');
             },
 
     todoHandler (event) {
-        console.log(event.target);
+        if (event.target.tagName === 'INPUT') {
+            this.updateTodoItem(); 
+        }
+    },
+    updateTodoItem (id) {
+        localStorage.getItem('todoForm');
+        console.log('todoForm');
     },
 
     preFillTodoList() {
@@ -149,6 +157,7 @@ const todoList = {
         this.addFormHandler();
 
         this.findTodo();
+        this.addTodoHandler();
 // вызов функции слушателя событий
         this.preFillTodoList();
         //this.deleteAllTasks ();
