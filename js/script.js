@@ -48,7 +48,7 @@ const todoList = {
 
     todoHandler (event) {
         if (event.target.tagName === 'INPUT') {
-            this.updateTodoItem(); 
+            this.updateTodoItem(event.target.id); 
         }
     },
     updateTodoItem (id) {
