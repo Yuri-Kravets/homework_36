@@ -19,14 +19,14 @@ const todoList = {
     },
     findTodo() {
         const todo = document.getElementById('todoItems');
-// находим и записываем в переменную форму
-
+        console.log(todo);
         if(todo === null) {
             throw new Error ('There is no such TODO on the page');
         }
-
         this.todo = todo;
+        
         return todo;
+        
     },
     addFormHandler() {
 // вешаем слушатель событий на кнопку
@@ -37,8 +37,8 @@ const todoList = {
     },
     addTodoHandler() {
         // вешаем слушатель событий на todo
-                this.form.addEventListener(
-                    'submit',
+                this.todo.addEventListener(
+                    'onclick',
                     (event) => this.formHandler(event)
                 ); 
             },
@@ -65,7 +65,7 @@ const todoList = {
                         .prepend(template);
                 })
 
-                console.log(this.todo);
+                //console.log(this.todo);
                 //document.querySelector('todoItems').addEventListener('onclick',(event) {
 //
   //              })
@@ -115,7 +115,6 @@ const todoList = {
         }
         
         let existingData = localStorage.getItem(this.formId);
-       
         existingData =JSON.parse(existingData);
         existingData.push(data);
         localStorage.setItem(
