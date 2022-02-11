@@ -54,7 +54,8 @@ const todoList = {
     updateTodoItem (id) {
        // console.log(id);
         const data = this.getData();
-        console.log(data[id]);
+        console.log(data[id].completed);
+        
     },
 
     preFillTodoList() {
