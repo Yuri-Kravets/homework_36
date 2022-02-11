@@ -66,21 +66,20 @@ const todoList = {
     },
     preFillHandler(){
         const data = this.getData();
+        let countId = 0;
        // console.dir(data);
         if(data !== null) {
             if (data.length > 0) {
+                
                 data.forEach(todoItem => {
+                    countId ++;
                     const template = this.createTemplate(todoItem);
-                    
+                    console.log(todoItem);
                     document
                         .getElementById('todoItems')
                         .prepend(template);
                 })
 
-                //console.log(this.todo);
-                //document.querySelector('todoItems').addEventListener('onclick',(event) {
-//
-  //              })
             }
         }
     },
@@ -105,7 +104,7 @@ const todoList = {
                 data[input.name] = input.value;
             });
             data['completed'] = 'false';
-            data['id'] = this.getIdTodoItem();
+            //data['id'] = this.getIdTodoItem();
             
         // вызываем функцию записи данных в localstorage
             this.setData(data);
@@ -241,17 +240,17 @@ const todoList = {
         return checkBox;
     },
 
-    getIdTodoItem () {
-        let idNumber = 1;
-        if (localStorage.getItem('lastIdTodoItem')) {
-            let oldIdNumber = localStorage.getItem('lastIdTodoItem');
-            idNumber = +oldIdNumber + 1;
-            localStorage.setItem('lastIdTodoItem',idNumber);
-            return idNumber
-        } 
-        localStorage.setItem('lastIdTodoItem',idNumber);
-        return idNumber
-    } 
+    // getIdTodoItem () {
+    //     let idNumber = 1;
+    //     if (localStorage.getItem('lastIdTodoItem')) {
+    //         let oldIdNumber = localStorage.getItem('lastIdTodoItem');
+    //         idNumber = +oldIdNumber + 1;
+    //         localStorage.setItem('lastIdTodoItem',idNumber);
+    //         return idNumber
+    //     } 
+    //     localStorage.setItem('lastIdTodoItem',idNumber);
+    //     return idNumber
+    // } 
 
 }
 
