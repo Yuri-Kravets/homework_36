@@ -59,9 +59,13 @@ const todoList = {
             data[id].completed = 'false';
 
         } else  {
-            data[id].completed = 'true'
+            data[id].completed = 'true';
         }
         localStorage.clear();
+        localStorage.setItem(
+            this.formId,
+            JSON.stringify(data)
+        );
         
     },
 
