@@ -212,11 +212,12 @@ const todoList = {
 
         const removeItemBtn = this.createElement(
             'input',
-            'btn',
+            ['btn','btn-info'],
             'submit',
+            'удалить'
             );
             console.log(removeItemBtn);
-        todoItem.apppend(removeItemBtn);
+        todoItem.append(removeItemBtn);
         console.log(removeItemBtn);
 
         return todoItem
@@ -285,10 +286,7 @@ const todoList = {
 todoList.init('todoForm');
 // Передаем id формы в функцию init
 
-localStorage.setItem('name','yuri');
-localStorage.setItem('name','Igor')
 
-localStorage.getItem('name');
 
 })();
 
