@@ -210,6 +210,13 @@ const todoList = {
             );
         todoItem.append(todoCheckBox);
 
+        const removeItemBtn = this.createElement(
+            'input',
+            'btn',
+            'submit',
+            );
+        todoItem.apppend(removeItemBtn);
+
         return todoItem
     },
 
@@ -232,6 +239,9 @@ const todoList = {
         }
         
         return el;
+    },
+    removeItem () {
+
     },
 
     createCheckBox (id,innerContent,completed) {
