@@ -42,12 +42,17 @@ const todoList = {
 
     todoHandler (event) {
         if (event.target.tagName === 'INPUT') {
-            this.updateTodoItem(event.target.id); 
-        }
+            if (event.target.type === 'checkbox') {
+                this.updateTodoItem(event.target.id); 
+            } 
+            if (event.target.type === 'button') {
+                this.removeTodoItem(event.target);
+            }
+            
+        } 
     },
     updateTodoItem (id) {
         const data = this.getData();
-        console.log(data[id].completed);
         if (data[id].completed === 'true') {
             data[id].completed = 'false';
 
@@ -79,7 +84,6 @@ const todoList = {
                     todoItem.id = this.countId;
                     this.countId ++;
                     const template = this.createTemplate(todoItem);
-                    console.log(todoItem);
                     document
                         .getElementById('todoItems')
                         .prepend(template);
@@ -92,10 +96,7 @@ const todoList = {
         event.preventDefault();       
         if (event.submitter.id === 'del'){
             if(confirm('точно удалить?')) {
-                localStorage.clear();
-                document.querySelectorAll('div.col-4.taskWrapper').forEach(divTask => {
-                    divTask.remove();
-                }) 
+                this.removeAll();
                 return
             }
         }     
@@ -160,6 +161,7 @@ const todoList = {
     createTemplate({title,description,completed,id}) {
 
         const todoItem = this.createElement('div','col-4');
+        todoItem.setAttribute('id', id);
         
         const taskWrapper = this.createElement('div','taskWrapper');
         
@@ -182,7 +184,7 @@ const todoList = {
 
         const todoCheckBox = this.createCheckBox(
             id,
-            'Выполнено',
+            'Done',
             completed
         
             );
@@ -190,13 +192,12 @@ const todoList = {
 
         const removeItemBtn = this.createElement(
             'input',
-            ['btn','btn-info'],
-            'submit',
-            'удалить'
+            ['btn','btn-danger'],
+            'button'
             );
-            console.log(removeItemBtn);
+            removeItemBtn.setAttribute('value','Delete');
+            removeItemBtn.setAttribute('id',id);
         todoItem.append(removeItemBtn);
-        console.log(removeItemBtn);
 
         return todoItem
     },
@@ -220,8 +221,28 @@ const todoList = {
         
         return el;
     },
-    removeItem () {
-
+    removeTodoItem (target) {
+    
+        target.parentElement.remove();
+        const data = this.getData();
+        data.splice(target.id,1);
+        
+        localStorage.clear();
+        document.querySelectorAll('div.col-4.taskWrapper').forEach(divTask => {
+            divTask.remove();
+        });
+        localStorage.setItem(
+            this.formId,
+            JSON.stringify(data)
+        );
+        this.preFillHandler();
+    },
+    removeAll () {
+        localStorage.clear();
+        document.querySelectorAll('div.col-4.taskWrapper').forEach(divTask => {
+            divTask.remove();
+        });
+        this.countId = 0;
     },
 
     createCheckBox (id,innerContent,completed) {
