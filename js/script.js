@@ -34,11 +34,11 @@ const todoList = {
         ); 
     },
     addTodoHandler() {
-                this.todo.addEventListener(
-                    'click',
-                    (event) => this.todoHandler(event)
-                ); 
-            },
+        this.todo.addEventListener(
+            'click',
+            (event) => this.todoHandler(event)
+        ); 
+    },
 
     todoHandler (event) {
         if (event.target.tagName === 'INPUT') {
@@ -80,6 +80,7 @@ const todoList = {
 
         if(data !== null) {
             if (data.length > 0) {
+                this.countId = 0;
                 data.forEach(todoItem => {
                     todoItem.id = this.countId;
                     this.countId ++;
@@ -99,6 +100,7 @@ const todoList = {
                 this.removeAll();
                 return
             }
+            return
         }     
         const inputs = this.findInputs(event.target);
         const data = {};
@@ -221,6 +223,25 @@ const todoList = {
         
         return el;
     },
+    createCheckBox (id,innerContent,completed) {
+        const checkBox = this.createElement('div','form-check');
+        
+            const checkInput = this.createElement('input','form-check-input','checkbox');
+            checkInput.setAttribute('id', id);
+            checkBox.prepend(checkInput);
+            
+            const checkLabel = this.createElement('label','form-check-label');
+            checkLabel.setAttribute('for', id);
+            if (innerContent) {
+                checkLabel.innerHTML = innerContent;
+            }
+            if (completed === 'true') {
+                checkInput.setAttribute('checked','');
+            }
+            
+            checkBox.prepend(checkLabel);
+        return checkBox;
+    },
     removeTodoItem (target) {
     
         target.parentElement.remove();
@@ -245,29 +266,8 @@ const todoList = {
         this.countId = 0;
     },
 
-    createCheckBox (id,innerContent,completed) {
-        const checkBox = this.createElement('div','form-check');
-        
-            const checkInput = this.createElement('input','form-check-input','checkbox');
-            checkInput.setAttribute('id', id);
-            checkBox.prepend(checkInput);
-            
-            const checkLabel = this.createElement('label','form-check-label');
-            checkLabel.setAttribute('for', id);
-            if (innerContent) {
-                checkLabel.innerHTML = innerContent;
-            }
-            if (completed === 'true') {
-                checkInput.setAttribute('checked','');
-            }
-            
-            checkBox.prepend(checkLabel);
-        return checkBox;
-    },
-
 
 }
-
 
 
 todoList.init('todoForm');
@@ -285,20 +285,4 @@ todoList.init('todoForm');
 
 
 
-
-function listenDeleteTodo(element) {
-    element.addEventListener("click", (event) => {
-        element.parentElement.remove();
-        event.stopPropagation();
-    });
-}
-        
-        // const divCheckBox = this.createElement('div','form-check');
-        //     const checkBox = this.createElement('input','form-check-input','checkbox','false');
-        //     divCheckBox.prepend(checkBox);
-        //     const checkLabel = this.createElement('label','form-check-label','false');
-        //     divCheckBox.prepend(checkBox);
-        // todoItem.append(divCheckBox);
-        //todoItem.append(divCheckBox);
-        
 
